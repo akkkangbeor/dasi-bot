@@ -14,6 +14,13 @@ interface ProblemStats {
   };
 }
 
+interface ProblemSummary {
+  totalProblems: number;
+  solvedProblems: number;
+  failedProblems: number;
+  partialProblems: number;
+}
+
 export class BaekjoonService {
   private static readonly BASE_URL = 'https://www.acmicpc.net';
   private static readonly SUBMISSION_URL = `${BaekjoonService.BASE_URL}/status`;
@@ -132,5 +139,36 @@ export class BaekjoonService {
 
     console.log('Final stats:', stats);
     return stats;
+  }
+
+  public static calculateProblemSummary(stats: ProblemStats): ProblemSummary {
+    const summary: ProblemSummary = {
+      totalProblems: 0,
+      solvedProblems: 0,
+      failedProblems: 0,
+      partialProblems: 0,
+    };
+
+    Object.values(stats).forEach((problemResults) => {
+      summary.totalProblems++;
+
+      const hasSolved = Object.entries(problemResults).some(
+        ([result, count]) => result.includes('맞았습니다') && count > 0,
+      );
+
+      const hasFailed = Object.entries(problemResults).some(
+        ([result, count]) => result.includes('틀렸습니다') && count > 0,
+      );
+
+      if (hasSolved) {
+        summary.solvedProblems++;
+      } else if (hasFailed) {
+        summary.failedProblems++;
+      } else {
+        summary.partialProblems++;
+      }
+    });
+
+    return summary;
   }
 }
