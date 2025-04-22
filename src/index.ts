@@ -1,7 +1,6 @@
 import { Client, Collection, GatewayIntentBits, Events } from 'discord.js';
 import { config } from 'dotenv';
-import fs from 'fs';
-import path from 'path';
+import { commands } from './commands';
 import { Command } from './types/Command';
 
 config();
@@ -26,31 +25,17 @@ const client = new Client({
 // 명령어 컬렉션 초기화
 client.commands = new Collection<string, Command>();
 
-// 명령어 파일 로드
-const commandsPath = path.join(__dirname, 'commands');
-const commandFiles = fs.readdirSync(commandsPath).filter((file) => file.endsWith('.ts'));
-
-for (const file of commandFiles) {
-  const filePath = path.join(commandsPath, file);
-  const command = require(filePath).default;
+// 명령어 등록
+for (const command of commands) {
   if ('data' in command && 'execute' in command) {
     client.commands.set(command.data.name, command);
   }
 }
 
-// 이벤트 핸들러 로드
-const eventsPath = path.join(__dirname, 'events');
-const eventFiles = fs.readdirSync(eventsPath).filter((file) => file.endsWith('.ts'));
-
-for (const file of eventFiles) {
-  const filePath = path.join(eventsPath, file);
-  const event = require(filePath).default;
-  if (event.once) {
-    client.once(event.name, (...args) => event.execute(...args));
-  } else {
-    client.on(event.name, (...args) => event.execute(...args));
-  }
-}
+// 준비 완료 이벤트
+client.once(Events.ClientReady, () => {
+  console.log('봇이 준비되었습니다!');
+});
 
 // 명령어 처리 이벤트
 client.on(Events.InteractionCreate, async (interaction) => {
@@ -59,7 +44,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
   const command = client.commands.get(interaction.commandName);
 
   if (!command) {
-    console.error(`No command matching ${interaction.commandName} was found.`);
+    console.error(`${interaction.commandName} 명령어를 찾을 수 없습니다.`);
     return;
   }
 
@@ -69,12 +54,12 @@ client.on(Events.InteractionCreate, async (interaction) => {
     console.error(error);
     if (interaction.replied || interaction.deferred) {
       await interaction.followUp({
-        content: 'There was an error while executing this command!',
+        content: '명령어 실행 중 오류가 발생했습니다!',
         ephemeral: true,
       });
     } else {
       await interaction.reply({
-        content: 'There was an error while executing this command!',
+        content: '명령어 실행 중 오류가 발생했습니다!',
         ephemeral: true,
       });
     }
