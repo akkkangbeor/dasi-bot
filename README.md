@@ -1,8 +1,21 @@
-# Discord Bot Boilerplate (TypeScript)
+# DASI Frontend
 
-TypeScript로 작성된 디스코드 봇을 위한 보일러플레이트 프로젝트입니다.
+DASI(Discord AI Service Integration)의 프론트엔드 프로젝트입니다.
 
-## 설치 방법
+## 프로젝트 개요
+
+DASI는 디스코드 봇과 AI 서비스를 통합하여 사용자에게 더 나은 경험을 제공하는 프로젝트입니다.
+
+## 기술 스택
+
+- TypeScript
+- Node.js
+- Discord.js
+- Axios
+- Cheerio
+- Luxon
+
+## 설치 및 실행 방법
 
 1. 저장소를 클론합니다:
 ```bash
@@ -20,51 +33,61 @@ DISCORD_TOKEN=your_bot_token_here
 CLIENT_ID=your_client_id_here
 ```
 
-4. 봇을 실행합니다:
+4. 개발 모드로 실행:
+```bash
+pnpm dev
+```
+
+5. 프로덕션 빌드 및 실행:
 ```bash
 pnpm build
 pnpm start
 ```
 
-개발 모드로 실행하려면:
-```bash
-pnpm dev
+## 봇 초대 링크
+
+봇을 서버에 초대하려면 아래 링크를 사용하세요:
+```
+https://discord.com/api/oauth2/authorize?client_id=1364088345902317608&permissions=1024&scope=bot%20applications.commands
 ```
 
-## 코드 포맷팅
+## 주요 스크립트
 
-코드 포맷팅을 적용하려면:
-```bash
-pnpm format
-```
-
-코드 포맷팅 검사:
-```bash
-pnpm format:check
-```
+- `pnpm dev`: 개발 모드로 실행
+- `pnpm build`: 프로덕션 빌드
+- `pnpm start`: 프로덕션 실행
+- `pnpm format`: 코드 포맷팅
+- `pnpm format:check`: 코드 포맷팅 검사
+- `pnpm deploy-commands`: 디스코드 명령어 배포
 
 ## 프로젝트 구조
 
-- `src/commands/`: 봇 명령어가 위치하는 디렉토리
-- `src/events/`: 이벤트 핸들러가 위치하는 디렉토리
-- `src/types/`: TypeScript 타입 정의가 위치하는 디렉토리
-- `src/index.ts`: 봇의 메인 파일
-- `dist/`: 컴파일된 JavaScript 파일이 위치하는 디렉토리
+- `src/`: 소스 코드
+  - `commands/`: 디스코드 봇 명령어
+  - `events/`: 이벤트 핸들러
+  - `types/`: TypeScript 타입 정의
+  - `index.ts`: 메인 진입점
+- `dist/`: 컴파일된 JavaScript 파일
+- `node_modules/`: 의존성 패키지
 
-## 명령어 추가하기
+## 개발 가이드
 
-`src/commands/` 디렉토리에 새로운 명령어 파일을 추가하세요. 예시는 `ping.ts`를 참고하세요.
+### 명령어 추가하기
 
-## 이벤트 핸들러 추가하기
+1. `src/commands/` 디렉토리에 새로운 명령어 파일을 생성합니다.
+2. 명령어 로직을 구현합니다.
+3. `pnpm deploy-commands`를 실행하여 명령어를 배포합니다.
 
-`src/events/` 디렉토리에 새로운 이벤트 핸들러 파일을 추가하세요. 예시는 `ready.ts`를 참고하세요.
+### 이벤트 핸들러 추가하기
 
-## TypeScript 설정
-
-- `tsconfig.json`: TypeScript 컴파일러 설정
-- `package.json`: 프로젝트 의존성 및 스크립트 설정
+1. `src/events/` 디렉토리에 새로운 이벤트 핸들러 파일을 생성합니다.
+2. 이벤트 처리 로직을 구현합니다.
 
 ## 코드 스타일
 
-- `.prettierrc`: Prettier 설정
-- `.prettierignore`: Prettier가 무시할 파일 목록 
+- Prettier를 사용하여 코드 포맷팅을 적용합니다.
+- `.prettierrc`와 `.prettierignore` 파일로 포맷팅 규칙을 관리합니다.
+
+## 라이센스
+
+[MIT License](LICENSE) 
