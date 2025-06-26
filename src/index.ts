@@ -2,6 +2,7 @@ import { Client, Collection, GatewayIntentBits, Events } from 'discord.js';
 import { config } from 'dotenv';
 import { commands } from './commands';
 import { Command } from './types/Command';
+import { Scheduler } from './services/scheduler';
 
 config();
 
@@ -35,6 +36,9 @@ for (const command of commands) {
 // 준비 완료 이벤트
 client.once(Events.ClientReady, () => {
   console.log('봇이 준비되었습니다!');
+
+  // 스케줄러 초기화
+  Scheduler.initialize(client);
 });
 
 // 명령어 처리 이벤트
@@ -51,7 +55,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
   try {
     await command.execute(interaction);
   } catch (error) {
-    console.error(error);
+    console.error('명령어 실행 중 오류가 발생했습니다:', error);
     if (interaction.replied || interaction.deferred) {
       await interaction.followUp({
         content: '명령어 실행 중 오류가 발생했습니다!',
@@ -67,4 +71,6 @@ client.on(Events.InteractionCreate, async (interaction) => {
 });
 
 // 봇 로그인
-client.login(process.env.DISCORD_TOKEN);
+client.login(process.env.DISCORD_TOKEN).catch((error) => {
+  console.error('봇 로그인 중 오류가 발생했습니다:', error);
+});

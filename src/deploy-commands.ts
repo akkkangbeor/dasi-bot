@@ -8,14 +8,11 @@ const commandsToRegister = commands.map((command) => command.data.toJSON());
 
 const rest = new REST({ version: '10' }).setToken(process.env.DISCORD_TOKEN!);
 
-// 봇 권한 설정
+// 실제로 필요한 권한만 설정
 const permissions = [
   PermissionFlagsBits.SendMessages,
   PermissionFlagsBits.ViewChannel,
-  PermissionFlagsBits.ReadMessageHistory,
-  PermissionFlagsBits.UseApplicationCommands,
   PermissionFlagsBits.EmbedLinks,
-  PermissionFlagsBits.AttachFiles,
 ];
 
 (async () => {
